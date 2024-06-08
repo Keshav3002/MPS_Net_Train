@@ -98,6 +98,14 @@ class Dataset3D(Dataset):
                 elif self.dataset_name == 'h36m':
                     db_file = osp.join(TCMR_DB_DIR, f'{self.dataset_name}_{self.set}_25fps_occ_nosmpl_db.pt')
 
+            if self.load_opt == 'repr_table1_3dpw_model':
+                if self.dataset_name == '3dpw':
+                    db_file = osp.join(TCMR_DB_DIR, f'{self.dataset_name}_{self.set}_db.pt')
+                elif self.dataset_name == 'mpii3d':
+                    db_file = osp.join(TCMR_DB_DIR, f'{self.dataset_name}_{self.set}_db.pt')
+                elif self.dataset_name == 'h36m':
+                    db_file = osp.join(TCMR_DB_DIR, f'{self.dataset_name}_{self.set}_25fps_db.pt')
+
             elif self.load_opt == 'repr_table4_h36m_mpii3d_model':
                 if self.dataset_name == '3dpw':
                     db_file = osp.join(TCMR_DB_DIR, f'{self.dataset_name}_{self.set}_db.pt')

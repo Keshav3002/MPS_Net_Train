@@ -20,8 +20,9 @@ from yacs.config import CfgNode as CN
 
 # CONSTANTS
 # You may modify them at will
-TCMR_DB_DIR = 'data/preprocessed_data'
-AMASS_DIR = 'data/amass'
+TCMR_DB_DIR = '/data/guest/datasets/tcmr_data_release/preprocessed_data/'
+# MPS_DB_DIR = 'data/preprocessed_data'
+# AMASS_DIR = 'data/amass'
 INSTA_DIR = 'data/insta_variety'
 MPII3D_DIR = 'data/mpi_inf_3dhp'
 THREEDPW_DIR = 'data/3dpw'
@@ -38,7 +39,7 @@ cfg.OUTPUT_DIR = 'results'
 cfg.EXP_NAME = 'default'
 cfg.DEVICE = 'cuda'
 cfg.DEBUG = True
-cfg.LOGDIR = ''
+cfg.LOGDIR = '/data/guest/src/MPS-Net_release'
 cfg.NUM_WORKERS = 8
 cfg.DEBUG_FREQ = 1000
 cfg.SEED_VALUE = -1

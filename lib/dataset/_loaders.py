@@ -105,14 +105,14 @@ def get_data_loaders(cfg):
 
     # exclude motion discriminator
     # ===== Motion Discriminator dataset =====
-    motion_disc_db = AMASS(seqlen=cfg.DATASET.SEQLEN)
-    #
-    motion_disc_loader = DataLoader(
-        dataset=motion_disc_db,
-        batch_size=cfg.TRAIN.BATCH_SIZE,
-        shuffle=True,
-        num_workers=cfg.NUM_WORKERS,
-    )
+    # motion_disc_db = AMASS(seqlen=cfg.DATASET.SEQLEN)
+    # #
+    # motion_disc_loader = DataLoader(
+    #     dataset=motion_disc_db,
+    #     batch_size=cfg.TRAIN.BATCH_SIZE,
+    #     shuffle=True,
+    #     num_workers=cfg.NUM_WORKERS,
+    # )
 
     # ===== Evaluation dataset =====
     overlap = ((cfg.DATASET.SEQLEN-1)/float(cfg.DATASET.SEQLEN))
@@ -128,4 +128,4 @@ def get_data_loaders(cfg):
 
     # return train_2d_loader, train_3d_loader, valid_loader
     # exclude motion discriminator
-    return train_2d_loader, train_3d_loader, motion_disc_loader, valid_loader
+    return train_2d_loader, train_3d_loader, valid_loader #, motion_disc_loader

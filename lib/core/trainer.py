@@ -60,11 +60,11 @@ class Trainer():
     ):
 
         # exclude motion discriminator
-        self.train_2d_loader, self.train_3d_loader, self.disc_motion_loader, self.valid_loader = data_loaders
-        # self.train_2d_loader, self.train_3d_loader, self.valid_loader = data_loaders
+        # self.train_2d_loader, self.train_3d_loader, self.disc_motion_loader, self.valid_loader = data_loaders
+        self.train_2d_loader, self.train_3d_loader, self.valid_loader = data_loaders
 
         # exclude motion discriminator
-        self.disc_motion_iter = iter(self.disc_motion_loader)
+        # self.disc_motion_iter = iter(self.disc_motion_loader)
 
         self.train_2d_iter = self.train_3d_iter = None
 
@@ -78,7 +78,7 @@ class Trainer():
         self.generator = generator
         self.gen_optimizer = gen_optimizer
 
-        self.motion_discriminator = motion_discriminator
+        # self.motion_discriminator = motion_discriminator
         self.dis_motion_optimizer = dis_motion_optimizer
 
         # Training parameters
@@ -133,7 +133,7 @@ class Trainer():
         }
 
         self.generator.train()
-        self.motion_discriminator.train()
+        # self.motion_discriminator.train()
 
         start = time.time()
 
@@ -164,12 +164,12 @@ class Trainer():
 
             # exclude motion discriminator
             real_body_samples = real_motion_samples = None
-            try:
-                real_motion_samples = next(self.disc_motion_iter)
-            except StopIteration:
-                self.disc_motion_iter = iter(self.disc_motion_loader)
-                real_motion_samples = next(self.disc_motion_iter)
-            move_dict_to_device(real_motion_samples, self.device)
+            # try:
+                # real_motion_samples = next(self.disc_motion_iter)
+            # except StopIteration:
+                # self.disc_motion_iter = iter(self.disc_motion_loader)
+                # real_motion_samples = next(self.disc_motion_iter)
+            # move_dict_to_device(real_motion_samples, self.device)
 
             # <======= Feedforward generator and discriminator
             if target_2d and target_3d:
@@ -195,7 +195,8 @@ class Trainer():
 ##            )
 
             # exclude motion discriminator
-            gen_loss, motion_dis_loss, loss_dict = self.criterion(
+            # gen_loss, motion_dis_loss, loss_dict = self.criterion(
+            gen_loss, loss_dict = self.criterion(
                 generator_outputs=preds,
                 generator_outputs_Dm=preds_Dm,
                 data_2d=target_2d,
@@ -203,7 +204,7 @@ class Trainer():
                 scores=scores,
                 data_body_mosh=real_body_samples,
                 data_motion_mosh=real_motion_samples,
-                motion_discriminator=self.motion_discriminator,
+                # motion_discriminator=self.motion_discriminator,
             )
             # =======>
 
@@ -218,14 +219,14 @@ class Trainer():
             # exclude motion discriminator
             if self.train_global_step % self.dis_motion_update_steps == 0:
                 self.dis_motion_optimizer.zero_grad()
-                motion_dis_loss.backward()
+                # motion_dis_loss.backward()
                 self.dis_motion_optimizer.step()
             # =======>
 
             # <======= Log training info
 ##            total_loss = gen_loss
             # exclude motion discriminator
-            total_loss = gen_loss + motion_dis_loss
+            total_loss = gen_loss #+ motion_dis_loss
 
             losses.update(total_loss.item(), inp.size(0))
             kp_2d_loss.update(loss_dict['loss_kp_2d'].item(), inp.size(0))
@@ -369,8 +370,8 @@ class Trainer():
             'gen_state_dict': self.generator.state_dict(),
             'performance': performance,
             'gen_optimizer': self.gen_optimizer.state_dict(),
-            'disc_motion_state_dict': self.motion_discriminator.state_dict(),
-            'disc_motion_optimizer': self.dis_motion_optimizer.state_dict(),
+            'disc_motion_optimizer': self.dis_motion_optimizer.state_dict()
+            #'disc_motion_state_dict': self.motion_discriminator.state_dict()
         }
 
         filename = osp.join(self.logdir, 'checkpoint.pth.tar')
@@ -398,7 +399,7 @@ class Trainer():
             self.best_performance = checkpoint['performance']
 
             if 'disc_motion_optimizer' in checkpoint.keys():
-                self.motion_discriminator.load_state_dict(checkpoint['disc_motion_state_dict'])
+                # self.motion_discriminator.load_state_dict(checkpoint['disc_motion_state_dict'])
                 self.dis_motion_optimizer.load_state_dict(checkpoint['disc_motion_optimizer'])
 
             logger.info(f"=> loaded checkpoint '{model_path}' "
